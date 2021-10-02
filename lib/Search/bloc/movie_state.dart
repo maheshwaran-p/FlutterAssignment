@@ -16,6 +16,11 @@ class SearchLoadedState extends MovieState {
   List<Object> get props => [response];
 }
 
+class DetailLoadingState extends MovieState {
+  @override
+  List<Object?> get props => [];
+}
+
 class MovieDetailState extends MovieState {
   final MovieDetail movieDetail;
 

@@ -52,14 +52,14 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                     color: Colors.black87,
                     child: Column(children: [
                       Container(
-                        height: 135,
+                        height: 140,
                         width: MediaQuery.of(context).size.height * 1,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                  left: 20.0, right: 20, top: 20, bottom: 10),
+                                  left: 20.0, right: 20, top: 17, bottom: 10),
                               child: Text(
                                 "${state.movieDetail.Title}",
                                 style: TextStyle(
@@ -190,10 +190,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                   left: 23,
                   child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MyApp()),
-                        );
+                        Navigator.pop(context);
                       },
                       child: CircleAvatar(
                           radius: 20,

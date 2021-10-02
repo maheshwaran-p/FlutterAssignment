@@ -13,6 +13,8 @@ class SearchMovieEvent extends MovieEvent {
   SearchMovieEvent(this.keyword);
 }
 
+class LoadOldResponseEvent extends MovieEvent {}
+
 class MovieDetialEvent extends MovieEvent {
   final String id;
 

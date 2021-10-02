@@ -33,6 +33,8 @@ dependencies:
   dio: ^4.0.0
   flutter_bloc: ^7.3.0
   equatable: ^2.0.3
+  shared_preferences: ^2.0.7
+  dio_cache_interceptor: ^3.0.2
   
   
 

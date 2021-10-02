@@ -11,10 +11,19 @@ part 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final MovieRepository movieRepository;
-
-  MovieBloc(this.movieRepository) : super(MovieInitial()) {
+  late MovieSearchResponse response;
+  MovieBloc(
+    this.movieRepository,
+  ) : super(MovieInitial()) {
     on<SearchMovieEvent>(_serachMovie);
     on<MovieDetialEvent>(_detailMovie);
+    on<LoadOldResponseEvent>(_loadOldResponse);
+  }
+
+  @override
+  void onChange(Change<MovieState> change) {
+    print(change);
+    super.onChange(change);
   }
 
   @override
@@ -25,14 +34,23 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   FutureOr<void> _serachMovie(
       SearchMovieEvent event, Emitter<MovieState> emit) async {
-    MovieSearchResponse response =
-        await movieRepository.searchMovie(event.keyword);
+    response = await movieRepository.searchMovie(event.keyword);
+    movieRepository.setResponse(response);
     emit(SearchLoadedState(response));
   }
 
   FutureOr<void> _detailMovie(
       MovieDetialEvent event, Emitter<MovieState> emit) async {
     MovieDetail movieDetail = await movieRepository.getMovieDetail(event.id);
+    emit(DetailLoadingState());
     emit(MovieDetailState(movieDetail));
+  }
+
+  FutureOr<void> _loadOldResponse(
+      LoadOldResponseEvent event, Emitter<MovieState> emit) async {
+    MovieSearchResponse? response = await movieRepository.getResponse();
+    if (response != null) {
+      emit(SearchLoadedState(response));
+    } else {}
   }
 }

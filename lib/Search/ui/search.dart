@@ -10,12 +10,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final TextEditingController _controller = TextEditingController();
-
   @override
   void initState() {
-    context.read<MovieBloc>().add(SearchMovieEvent("tha"));
-
+    context.read<MovieBloc>().add(LoadOldResponseEvent());
     super.initState();
   }
 
@@ -40,79 +37,27 @@ class _MyAppState extends State<MyApp> {
               },
               buildWhen: (previous, current) {
                 if (current is MovieDetailState) return false;
+                if (current is DetailLoadingState) return false;
                 return true;
               },
               builder: (context, state) {
-                if (state is SearchLoadedState) {
-                  return Column(children: [
-                    Row(children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                right: 250.0, left: 20, top: 42),
-                            child: Text(
-                              "Browse",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 20.0, top: 5),
-                            child: Text(
-                              "Movies",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w100),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 27.0),
-                        child: Icon(
-                          Icons.menu_sharp,
-                          color: Colors.white24,
-                        ),
-                      )
-                    ]),
-                    Container(
-                      height: 45,
-                      margin: EdgeInsets.only(
-                          left: 5.0, right: 5.0, top: 48.0, bottom: 20.0),
-                      padding: EdgeInsets.only(left: 20.0),
-                      decoration: BoxDecoration(
-                          color: Colors.white10,
-                          borderRadius: BorderRadius.circular(.0)),
-                      child: TextField(
-                        controller: _controller,
-                        onChanged: (value) {
-                          context
-                              .read<MovieBloc>()
-                              .add(SearchMovieEvent(value));
-                        },
-                        decoration: InputDecoration(
-                          hintText: ("Search movies"),
-                          hintStyle: TextStyle(color: Colors.white24),
-                          prefixIcon: Icon(
-                            Icons.search,
-                            color: Colors.white24,
-                          ),
-                          enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
+                if (state is MovieInitial) {
+                  return Container(
+                      child: Column(children: [
+                    SearchBox(),
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(top: 90.0, left: 5, right: 5),
+                      child: Text(
+                        "Your Search Result Will Appear Here!",
                         style: TextStyle(color: Colors.white),
                       ),
-                    ),
+                    )
+                  ]));
+                }
+                if (state is SearchLoadedState) {
+                  return Column(children: [
+                    SearchBox(),
                     Container(
                         height: MediaQuery.of(context).size.height * .7,
                         child: GridView.count(
@@ -182,5 +127,82 @@ class _MyAppState extends State<MyApp> {
                 );
               },
             )));
+  }
+}
+
+class SearchBox extends StatelessWidget {
+  const SearchBox({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 250.0, left: 20, top: 42),
+                child: Text(
+                  "Browse",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, top: 5),
+                child: Text(
+                  "Movies",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w100),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 27.0),
+            child: Icon(
+              Icons.menu_sharp,
+              color: Colors.white24,
+            ),
+          )
+        ]),
+        Container(
+          height: 45,
+          margin:
+              EdgeInsets.only(left: 5.0, right: 5.0, top: 48.0, bottom: 20.0),
+          padding: EdgeInsets.only(left: 20.0),
+          decoration: BoxDecoration(
+              color: Colors.white10, borderRadius: BorderRadius.circular(.0)),
+          child: TextField(
+            onChanged: (value) {
+              context.read<MovieBloc>().add(SearchMovieEvent(value));
+            },
+            decoration: InputDecoration(
+              hintText: ("Search movies"),
+              hintStyle: TextStyle(color: Colors.white24),
+              prefixIcon: Icon(
+                Icons.search,
+                color: Colors.white24,
+              ),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.transparent),
+              ),
+            ),
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+    );
   }
 }
