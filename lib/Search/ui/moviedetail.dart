@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutterassignment/Search/bloc/movie_bloc.dart';
-import 'package:flutterassignment/Search/ui/search.dart';
 import 'package:flutterassignment/models/movie_detail_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,9 +46,16 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                 left: 15,
                 right: 15,
                 child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Colors.black87,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
                     height: MediaQuery.of(context).size.height * 0.8,
                     width: MediaQuery.of(context).size.height * 1,
-                    color: Colors.black87,
                     child: Column(children: [
                       Container(
                         height: 140,
@@ -90,7 +96,7 @@ class _MovieDetailViewState extends State<MovieDetailView> {
                                 Padding(
                                   padding: const EdgeInsets.only(left: 40.0),
                                   child: Icon(
-                                    Icons.timelapse,
+                                    Icons.timelapse_outlined,
                                     size: 20,
                                     color: Colors.white,
                                   ),
